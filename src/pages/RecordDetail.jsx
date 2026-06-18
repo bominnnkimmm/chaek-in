@@ -138,21 +138,33 @@ function RecordDetail() {
   }
 
   const handleSaveAsImage = async () => {
-    if (!canvasRef.current) return
-    try {
-      const canvas = await html2canvas(canvasRef.current, {
-        backgroundColor: '#FEFCF8',
-        scale: 2,
-        useCORS: true
-      })
-      const link = document.createElement('a')
-      link.download = `책크인_${currentPassage.page}페이지.png`
-      link.href = canvas.toDataURL('image/png')
-      link.click()
-    } catch (err) {
-      alert('저장 실패: ' + err.message)
-    }
+  if (!canvasRef.current) return
+  try {
+    const canvas = await html2canvas(canvasRef.current, {
+      backgroundColor: '#FEFCF8',
+      scale: 2,
+      useCORS: true,
+      ignoreElements: (element) => {
+        return element.classList?.contains('group/item') || false
+      },
+      onclone: (clonedDoc) => {
+        const elements = clonedDoc.querySelectorAll('*')
+        elements.forEach(el => {
+          const style = el.getAttribute('style')
+          if (style && style.includes('oklab')) {
+            el.setAttribute('style', style.replace(/oklab\([^)]+\)/g, 'transparent'))
+          }
+        })
+      }
+    })
+    const link = document.createElement('a')
+    link.download = `책크인_${currentPassage.page}페이지.png`
+    link.href = canvas.toDataURL('image/png')
+    link.click()
+  } catch (err) {
+    alert('저장 실패: ' + err.message)
   }
+}
 
   // 마우스 드래그
   const handleDragStart = (e, id) => {

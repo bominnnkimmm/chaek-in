@@ -144,16 +144,16 @@ function RecordDetail() {
       backgroundColor: '#FEFCF8',
       scale: 2,
       useCORS: true,
-      ignoreElements: (element) => {
-        return element.classList?.contains('group/item') || false
-      },
-      onclone: (clonedDoc) => {
-        const elements = clonedDoc.querySelectorAll('*')
-        elements.forEach(el => {
-          const style = el.getAttribute('style')
-          if (style && style.includes('oklab')) {
-            el.setAttribute('style', style.replace(/oklab\([^)]+\)/g, 'transparent'))
-          }
+      allowTaint: true,
+      foreignObjectRendering: false,
+      logging: false,
+      onclone: (clonedDoc, element) => {
+        const allElements = element.querySelectorAll('*')
+        allElements.forEach(el => {
+          const computed = window.getComputedStyle(el)
+          el.style.color = computed.color
+          el.style.backgroundColor = computed.backgroundColor
+          el.style.borderColor = computed.borderColor
         })
       }
     })

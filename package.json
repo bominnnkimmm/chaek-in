@@ -12,7 +12,9 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "firebase": "^12.13.0",
+    "html2canvas": "^1.4.1",
     "react": "^19.2.6",
+    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.15.1",
     "tailwindcss": "^4.3.0"
